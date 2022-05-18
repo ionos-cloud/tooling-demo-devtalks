@@ -9,15 +9,16 @@ variable "location" {
     description = "The location of the LAN"
 }
 
-# variable "datacenter_description" {
-#     type = string
-#     description = "The description of the datacenter"
-# }
-
 ### network
 
 variable "lan_public" {
     type = bool
+}
+
+### server
+
+variable "cpu_family" {
+    type = string
 }
 
 ### alb 

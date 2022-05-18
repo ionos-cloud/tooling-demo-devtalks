@@ -3,47 +3,30 @@ data "ionoscloud_datacenter" "dev_talks" {
     location        = var.location
 }
 
-module "lan1" {
+module "lan" {
+    count           = 2
     source          = "./network"
     datacenter_id   = data.ionoscloud_datacenter.dev_talks.id
-    name            = format("%sLan1", var.name)
-    public          = var.lan_public
-}
-
-
-module "lan2" {
-    source          = "./network"
-    datacenter_id   = data.ionoscloud_datacenter.dev_talks.id
-    name            = format("%sLan2", var.name)
-    public          = var.lan_public
-}
-
-data "ionoscloud_lan" "lan1" {
-    depends_on = [
-      module.lan1
-    ]
-    datacenter_id   = data.ionoscloud_datacenter.dev_talks.id
-    name            = format("%sLan1", var.name)
-}
-
-data "ionoscloud_lan" "lan2" {
-    depends_on = [
-      module.lan2
-    ]
-    datacenter_id   = data.ionoscloud_datacenter.dev_talks.id
-    name            = format("%sLan2", var.name)
+    name            = (count.index == 0 ? format("%sLan1", var.name): format("%sLan2", var.name))
 }
 
 module "alb" {
-    depends_on = [
-      module.lan1,
-      module.lan2
-    ]
     source          = "./alb/alb"
     datacenter_id   = data.ionoscloud_datacenter.dev_talks.id
     name            = format("%sAlb", var.name)
-    listener_lan    = data.ionoscloud_lan.lan1.id
+    listener_lan    = module.lan[0].lan_id
     ips             = var.ips
-    target_lan      = data.ionoscloud_lan.lan2.id
+    target_lan      = module.lan[1].lan_id
     lb_private_ips  = var.lb_private_ips
+}
+
+
+module "server" {
+    count           = 2
+    source          = "./server"
+    datacenter_id   = data.ionoscloud_datacenter.dev_talks.id
+    name            = (count.index == 0 ? format("%sServer1", var.name): format("%sServer2", var.name))
+    cpu_family      = var.cpu_family
+    lan             = module.lan[1].lan_id
+    
 }
