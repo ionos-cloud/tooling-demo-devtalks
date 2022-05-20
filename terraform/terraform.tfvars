@@ -1,6 +1,9 @@
 name = "DevTalks"
 location = "de/txl"
 lan_public = false
-ips = [ "10.12.118.224" ]
 lb_private_ips = [ "10.13.72.225/24" ]
 cpu_family = "INTEL_SKYLAKE"
+server_private_ips_1 = [ "10.0.2.22" ]
+server_private_ips_2 = [ "10.0.2.23" ]
+snapshot1 = "bf0afefe-c5ce-469a-b6c0-e44832b3a5b2"
+snapshot2 = "b3740121-4c7e-4dd3-bc3c-ba8c351a2ab9"

@@ -1,5 +1,5 @@
 resource "ionoscloud_datacenter"  "dev_talks" {
-  name			= var.name
+  name			= "DevTalksTerraform"
   location		= var.location
-  description	= var.description
+  description	= "Datacenter for Dev Talks Demo"
 }

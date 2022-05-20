@@ -15,18 +15,33 @@ variable "lan_public" {
     type = bool
 }
 
+variable "server_private_ips_1"{
+    type = list(string)
+}
+
+
+variable "server_private_ips_2"{
+    type = list(string)
+}
+
+
 ### server
 
 variable "cpu_family" {
     type = string
 }
 
-### alb 
-variable "ips" {
-    type = list(string) 
-    description = "ID of the listening (inbound) LAN"
+variable "snapshot1" {
+    type = string
 }
 
+variable "snapshot2" {
+    type = string
+}
+
+### alb 
 variable "lb_private_ips" {
     type = list(string) 
 }
+
+
