@@ -24,18 +24,18 @@ variable "private_lan" {
 }
 
 
-variable "public_lan" {
-    type = string
-    description = "The id of the LAN"
-}
-
 variable "private_ips" {
     type = list(string)
 }
 
-variable "public_ips" {
-    type = list(string)
-}
+# variable "public_ips" {
+#     type = list(string)
+# }
+
+# variable "public_lan" {
+#     type = string
+#     description = "The id of the LAN"
+# }
 
 variable "image_name" {
     type = string  

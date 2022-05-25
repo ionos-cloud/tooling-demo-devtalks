@@ -67,12 +67,5 @@ resource "ionoscloud_application_loadbalancer_forwardingrule" "alb_fr" {
       name                    = "alb_to_webserver"
       type                    = "FORWARD"
       target_group            = ionoscloud_target_group.target_group.id
-      conditions {
-          type                = "QUERY"
-          condition           = "CONTAINS"
-          negate              = true
-          key                 = "goto"
-          value               = "something"
-      }
   }
 }

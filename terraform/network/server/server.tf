@@ -22,13 +22,19 @@ resource "ionoscloud_server" "server" {
   nic {
     lan             = var.private_lan
     ips             = var.private_ips
+    dhcp            = true
+    firewall_active = false
+    firewall_type   = "INGRESS"
   }
 }
 
-resource "ionoscloud_nic" "nic" {
-  datacenter_id     = var.datacenter_id
-  server_id         = ionoscloud_server.server.id
-  lan               = var.public_lan
-  ips               = var.public_ips
-}
+# resource "ionoscloud_nic" "nic" {
+#   datacenter_id     = var.datacenter_id
+#   server_id         = ionoscloud_server.server.id
+#   lan               = var.public_lan
+#   ips               = var.public_ips
+#   dhcp            = true
+#   firewall_active = false
+#   firewall_type   = "INGRESS"
+# }
 

@@ -11,7 +11,6 @@ module "lan" {
     public          = (count.index == 0 ? true: false)
 }
 
-
 module "ip_block" {
     source          = "./network/ip_block"
     location        = var.location
@@ -24,9 +23,10 @@ module "server" {
     server_name     = format("ws%s", count.index+1)
     cpu_family      = var.cpu_family
     image_name      = (count.index == 0 ? var.snapshot1 : var.snapshot2)
+    # image_name      = var.image
     volume_name     = format("hdd%s", count.index+1)
-    public_lan      = module.lan[0].lan_id
-    public_ips      = (count.index == 0 ? [module.ip_block.ips[0]]  : [module.ip_block.ips[1]])
+    # public_lan      = module.lan[0].lan_id
+    # public_ips      = (count.index == 0 ? [module.ip_block.ips[0]]  : [module.ip_block.ips[1]])
     private_lan     = module.lan[1].lan_id
     private_ips     = (count.index == 0 ? var.server_private_ips_1: var.server_private_ips_2)
   }
