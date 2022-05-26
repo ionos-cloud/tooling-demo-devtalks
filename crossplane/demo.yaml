@@ -1,0 +1,268 @@
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: IPBlock
+metadata:
+  name: devexample
+spec:
+  forProvider:
+    name: DevTalksCrossplane
+    size: 1
+    location: de/txl
+  providerConfigRef:
+    name: example
+---
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: Datacenter
+metadata:
+  name: devexample
+spec:
+  forProvider:
+    name: DevTalksCrossplane
+    location: de/txl
+    description: test
+  providerConfigRef:
+    name: example
+---
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: Volume
+metadata:
+  name: devexample1
+spec:
+  forProvider:
+    name: DevTalksCrossplaneVolume1
+    size: 10
+    type: HDD
+    image: a074d022-a66d-4ce7-a024-29b15421ef98
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+  providerConfigRef:
+    name: example
+---
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: Server
+metadata:
+  name: devexample1
+spec:
+  forProvider:
+    name: DevTalksCrossplaneServer1
+    cores: 4
+    ram: 4096
+    availabilityZone: AUTO
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+    volumeConfig:
+      volumeIdRef:
+        name: devexample1
+  providerConfigRef:
+    name: example
+---
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: Lan
+metadata:
+  name: devexample1
+spec:
+  forProvider:
+    name: DevTalksCrossplaneLan1
+    public: true
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+  providerConfigRef:
+    name: example
+---
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: Volume
+metadata:
+  name: devexample2
+spec:
+  forProvider:
+    name: DevTalksCrossplaneVolume2
+    size: 10
+    type: HDD
+    image: 3c68e466-62fd-4a03-8115-c39fc580b95a
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+  providerConfigRef:
+    name: example
+---
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: Server
+metadata:
+  name: devexample2
+spec:
+  forProvider:
+    name: DevTalksCrossplaneServer2
+    cores: 4
+    ram: 4096
+    availabilityZone: AUTO
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+    volumeConfig:
+      volumeIdRef:
+        name: devexample2
+  providerConfigRef:
+    name: example
+---
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: Lan
+metadata:
+  name: devexample2
+spec:
+  forProvider:
+    name: DevTalksCrossplaneLan2
+    public: false
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+  providerConfigRef:
+    name: example
+---
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: Nic
+metadata:
+  name: devexample1
+spec:
+  forProvider:
+    name: DevTalksCrossplaneNic1
+    dhcp: true
+    ipsConfigs:
+      ips: [ 10.0.2.19 ]
+    firewallActive: false
+    firewallType: INGRESS
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+    serverConfig:
+      serverIdRef:
+        name: devexample1
+    lanConfig:
+      lanIdRef:
+        name: devexample2
+  providerConfigRef:
+    name: example
+---
+apiVersion: compute.ionoscloud.crossplane.io/v1alpha1
+kind: Nic
+metadata:
+  name: devexample2
+spec:
+  forProvider:
+    name: DevTalksCrossplaneNic2
+    dhcp: true
+    ipsConfigs:
+      ips: [ 10.0.2.20 ]
+    firewallActive: false
+    firewallType: INGRESS
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+    serverConfig:
+      serverIdRef:
+        name: devexample2
+    lanConfig:
+      lanIdRef:
+        name: devexample2
+  providerConfigRef:
+    name: example
+---
+apiVersion: alb.ionoscloud.crossplane.io/v1alpha1
+kind: ApplicationLoadBalancer
+metadata:
+  name: devexample
+spec:
+  forProvider:
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+    name: DevTalksCrossplaneAppLoadBalancer
+    targetLanConfig:
+      lanIdRef:
+        name: devexample2
+    listenerLanConfig:
+      lanIdRef:
+        name: devexample1
+    ipsConfig:
+      ipsBlockConfigs:
+        - ipBlockIdRef:
+            name: devexample
+          indexes: [ 0 ]
+  providerConfigRef:
+    name: example
+---
+apiVersion: alb.ionoscloud.crossplane.io/v1alpha1
+kind: TargetGroup
+metadata:
+  name: devexample
+spec:
+  forProvider:
+    name: DevTalksCrossplaneTargetGroup
+    algorithm: ROUND_ROBIN
+    protocol: HTTP
+    targets:
+      - ip: 10.0.2.19
+        port: 80
+        weight: 1
+      - ip: 10.0.2.20
+        port: 80
+        weight: 1
+  providerConfigRef:
+    name: example
+---
+apiVersion: alb.ionoscloud.crossplane.io/v1alpha1
+kind: ForwardingRule
+metadata:
+  name: devexample
+spec:
+  forProvider:
+    datacenterConfig:
+      datacenterIdRef:
+        name: devexample
+    applicationLoadBalancerConfig:
+      applicationLoadBalancerIdRef:
+        name: devexample
+    name: DevTalksCrossplaneAppRule
+    protocol: HTTP
+    listenerIpConfig:
+      ipBlockConfig:
+        ipBlockIdRef:
+          name: devexample
+        index: 0
+    listenerPort: 80
+    httpRules:
+      - name: devTalksCrossplaneFWDRule
+        type: FORWARD
+        targetGroupConfig:
+          targetGroupIdRef:
+            name: devexample
+        conditions:
+          - type: QUERY
+            condition: ENDS_WITH
+            negate: true
+            key: goto
+            value: onos
+      - name: devTalksCrossplaneRedirectRule
+        type: REDIRECT
+        dropQuery: true
+        location: "https://ionos.com"
+        statusCode: 301
+        conditions:
+          - type: QUERY
+            condition: ENDS_WITH
+            negate: false
+            key: goto
+            value: onos
+      - name: devTalksCrossplaneStaticRule
+        type: STATIC
+        responseMessage: "IONOS CLOUD AT DEVTALKS ROMANIA 2022! 🎉"
+        contentType: "text/html"
+        statusCode: 503
+        conditions:
+          - type: COOKIE
+            condition: EXISTS
+            negate: false
+            key: "503"
+  providerConfigRef:
+    name: example
