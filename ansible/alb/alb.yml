@@ -1,0 +1,54 @@
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Create Application Load Balancer
+      application_load_balancer:
+        datacenter_id: "{{ datacenter_response.datacenter.id }}"
+        name: "{{ name }}"
+        ips:
+          - "{{ ipblock.ipblock.properties.ips[0] }}"
+        listener_lan: "{{ listener_lan.lan.id }}"
+        target_lan: "{{ target_lan.lan.id }}"
+        lb_private_ips: "{{ lb_private_ips }}"
+        wait: "{{ wait }}"
+      register: alb_response
+
+    - name: Create Target Group
+      target_group:
+        name: "{{ name }}"
+        algorithm: "{{ algorithm }}"
+        protocol: "{{ protocol }}"
+        targets:
+          - ip: "{{ ws1.machines[0]['entities']['nics']['items'][0].properties.ips[0] }}"
+            port: "{{ target_port }}"
+            weight: "{{ weight }}"
+            health_check_enabled: "{{ health_check_enabled }}"
+            maintenance_enabled: "{{ maintenance_enabled }}"
+
+          - ip: "{{ ws2.machines[0]['entities']['nics']['items'][0].properties.ips[0] }}"
+            port: "{{ target_port }}"
+            weight: "{{ weight }}"
+            health_check_enabled: "{{ health_check_enabled }}"
+            maintenance_enabled: "{{ maintenance_enabled }}"
+        wait: "{{ wait }}"
+      register: target_group_response
+
+    - name: Create Application Load Balancer Forwarding Rule
+      application_load_balancer_forwardingrule:
+        datacenter_id: "{{ datacenter_response.datacenter.id }}"
+        application_load_balancer_id: "{{ alb_response.application_load_balancer.id }}"
+        name: "{{ name }}"
+        protocol: "{{ protocol }}"
+        listener_ip: "{{ ipblock.ipblock.properties.ips[0] }}"
+        listener_port: "{{ listener_port }}"
+        http_rules:
+          - name: "{{ http_rule_name }}"
+            type: "{{ http_rule_type }}"
+            target_group: "{{ target_group_response.target_group.id }}"
+        wait: "{{ wait }}"
+      register: alb_forwarding_rule_response

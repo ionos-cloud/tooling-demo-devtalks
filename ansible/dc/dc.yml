@@ -1,0 +1,15 @@
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Provision datacenter
+      datacenter:
+        name: "{{ datacenter }}"
+        description: "{{ description }}"
+        location: "{{ location }}"
+        wait: true
+      register: datacenter_response

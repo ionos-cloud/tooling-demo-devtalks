@@ -1,0 +1,40 @@
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Provision webserver1
+      server:
+        datacenter: "{{ datacenter }}"
+        name: "ws1"
+        cores: "{{ cores }}"
+        ram: "{{ ram }}"
+        volume_size: "{{ volume_size }}"
+        cpu_family: "{{ cpu_family }}"
+        disk_type: "{{ disk_type }}"
+        image: "{{ snapshot_ws1 }}"
+        location: "{{ location }}"
+        lan: "{{ target_lan.lan.id }}"
+        state: present
+        nic_ips: "{{ ip_ws1 }}"
+      register: ws1
+
+
+    - name: Provision webserver2
+      server:
+        datacenter: "{{ datacenter }}"
+        name: "ws2"
+        cores: "{{ cores }}"
+        ram: "{{ ram }}"
+        volume_size: "{{ volume_size }}"
+        cpu_family: "{{ cpu_family }}"
+        disk_type: "{{ disk_type }}"
+        image: "{{ snapshot_ws2 }}"
+        location: "{{ location }}"
+        lan: "{{ target_lan.lan.id }}"
+        state: present
+        nic_ips: "{{ ip_ws2 }}"
+      register: ws2

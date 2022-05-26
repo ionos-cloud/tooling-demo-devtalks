@@ -1,0 +1,11 @@
+datacenter: DevTalks_ansible
+cores: 1
+ram: 1024
+volume_size: 20
+cpu_family: INTEL_SKYLAKE
+disk_type: SSD Premium
+snapshot_ws1: a074d022-a66d-4ce7-a024-29b15421ef98
+snapshot_ws2: 3c68e466-62fd-4a03-8115-c39fc580b95a
+ip_ws1: 10.0.3.11
+ip_ws2: 10.0.3.12
+location: de/txl

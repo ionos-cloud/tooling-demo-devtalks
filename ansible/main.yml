@@ -1,0 +1,16 @@
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+- name: Provision Datacenter
+  import_playbook: dc/dc.yml
+
+- name: Provision network resources
+  import_playbook: network/network.yml
+
+- name: Provision compute resources
+  import_playbook: compute/compute.yml
+
+- name: Provision alb resources
+  import_playbook: alb/alb.yml
+

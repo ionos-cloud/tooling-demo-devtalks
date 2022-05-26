@@ -1,0 +1,6 @@
+name: "DevTalks_ansible"
+ipblock_size: 1
+location: de/txl
+listener_lan_name: "listener_lan"
+target_lan_name: "target_lan"
+datacenter: DevTalks_ansible

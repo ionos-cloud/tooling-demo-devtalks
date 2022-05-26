@@ -1,0 +1,29 @@
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Create ipblock
+      ipblock:
+        name: "{{ name }}"
+        location: "{{ location }}"
+        size: "{{ ipblock_size }}"
+        state: present
+      register: ipblock
+
+    - name: Create Listener LAN
+      lan:
+        datacenter: "{{ datacenter }}"
+        name: "{{ listener_lan_name }}"
+        public: true
+      register: listener_lan
+
+    - name: Create Target LAN
+      lan:
+        datacenter: "{{ datacenter }}"
+        name: "{{ target_lan_name }}"
+        public: false
+      register: target_lan

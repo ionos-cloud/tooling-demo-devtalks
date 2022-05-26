@@ -1,0 +1,14 @@
+lb_private_ips: 10.0.3.10/23
+algorithm: "ROUND_ROBIN"
+protocol: "HTTP"
+target_port: 80
+listener_port: 80
+weight: 1
+health_check_enabled: false
+maintenance_enabled: false
+name: DevTalks_ansible
+http_rule_name: alb_to_webserver
+http_rule_type: FORWARD
+wait: True
+ip_ws1: 10.0.3.11
+ip_ws2: 10.0.3.12
