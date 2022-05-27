@@ -256,13 +256,13 @@ spec:
             value: onos
       - name: devTalksCrossplaneStaticRule
         type: STATIC
-        responseMessage: "IONOS CLOUD AT DEVTALKS ROMANIA 2022! 🎉"
+        responseMessage: "IONOS CLOUD AT DEVTALKS ROMANIA 2022!"
         contentType: "text/html"
         statusCode: 503
         conditions:
-          - type: COOKIE
-            condition: EXISTS
+          - type: PATH
+            condition: CONTAINS
             negate: false
-            key: "503"
+            value: "devtalks"
   providerConfigRef:
     name: example
