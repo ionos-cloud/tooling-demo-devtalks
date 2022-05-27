@@ -4,7 +4,7 @@ metadata:
   name: devexample
 spec:
   forProvider:
-    name: DevTalks2022Crossplane
+    name: DevTalksCrossplane
     size: 1
     location: de/txl
   providerConfigRef:
