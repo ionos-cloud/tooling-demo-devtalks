@@ -12,7 +12,7 @@ service apache2 restart
 update-rc.d apache2 defaults
 
 echo "$(date): generating webserver content." >> /tmp/log
-echo "<html><body><h1>Hello from Server 1</h1></body></html>" > /var/www/html/index.html
+echo "Hello, DevTalks 2022, from Server 1 powered by IONOS Cloud!" > /var/www/html/index.html
 echo "<html><body><h1>Server 1 is healthy</h1></body></html>" > /var/www/html/healthy.html
 echo "function handle(r)
         r.usleep(5000000)
