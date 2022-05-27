@@ -39,10 +39,6 @@ variable "snapshot2" {
     type = string
 }
 
-# variable "image" {
-#     type = string
-# }
-
 ### alb 
 variable "lb_private_ips" {
     type = list(string) 
