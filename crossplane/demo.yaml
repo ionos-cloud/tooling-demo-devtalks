@@ -4,7 +4,7 @@ metadata:
   name: devexample
 spec:
   forProvider:
-    name: DevTalksCrossplane
+    name: DevTalks2022Crossplane
     size: 1
     location: de/txl
   providerConfigRef:
@@ -31,7 +31,7 @@ spec:
     name: DevTalksCrossplaneVolume1
     size: 10
     type: HDD
-    image: a074d022-a66d-4ce7-a024-29b15421ef98
+    image: 91927522-5acb-4015-b4ff-38916af5f91a
     datacenterConfig:
       datacenterIdRef:
         name: devexample
@@ -80,7 +80,7 @@ spec:
     name: DevTalksCrossplaneVolume2
     size: 10
     type: HDD
-    image: 3c68e466-62fd-4a03-8115-c39fc580b95a
+    image: 7515d4d0-55ab-4311-a386-ead313f7347f
     datacenterConfig:
       datacenterIdRef:
         name: devexample
